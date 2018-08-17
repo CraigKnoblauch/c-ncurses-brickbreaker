@@ -2,12 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#define DELAY 30000
-#define BALL "o"
-#define PADDLE "/^^^^^^^^\\"
-#define PADDLE_LEN 10
-#define PADDLE_INTERVAL 4
-
 
 int main(int argc, char* argv[])
 {

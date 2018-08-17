@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "brick.h"
 
-#define DELAY 3000
+#define DELAY 30000
 #define BALL "o"
 #define PADDLE "/^^^^^^^^\\"
 #define PADDLE_LEN 10
