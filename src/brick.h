@@ -20,6 +20,6 @@ typedef struct bricknode
 #define MAX_SIZE 4
 
 int generate_bricks( WINDOW*, bricknode** );
-int print_bricks( WINDOW*, bricknode** );
+int print_bricks( WINDOW*, bricknode* );
 
 #endif

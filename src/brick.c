@@ -24,41 +24,52 @@ int generate_bricks(WINDOW* window, bricknode** head)
 		curr_size = (rand() % MAX_SIZE) + 1;
 		while( curr_x<=brick_endx && curr_x+curr_size<=brick_endx )
 		{
+
 			/* Add brick to list */
 			if( iter == *(head) )
-			{	
+			{
 				iter->br.y = row;
 				iter->br.x1 = curr_x;
 				iter->br.x2 = curr_x + curr_size;
-				iter = iter->next;
+				iter->next = NULL;
 			}
 			else
 			{
+				iter = iter->next;
 				iter = (bricknode*)malloc(sizeof(bricknode));
 				iter->br.y = row;
 				iter->br.x1 = curr_x;
 				iter->br.x2 = curr_x + curr_size;
-				iter = iter->next;
-
+				iter->next = NULL;
 			}
 
 			/* Draw brick */
 			for( int i=0 ; i<curr_size ; i++ )
 			{
-				mvprintw( row,curr_x+i, "%c",'+' );
+				mvwprintw( window,row,curr_x+i, "%c",'+' );
 			}
 			curr_x += (curr_size+1);
 			curr_size = (rand() % MAX_SIZE) + 1;
 		}
 			
 	}
-	iter->next = NULL;
 	return 0;
 }
 
 
 
-int print_bricks(WINDOW* window, bricknode** head)
+int print_bricks(WINDOW* window, bricknode* head)
 {
+	bricknode* iter = head;
+	mvwprintw( window, 5, 4, "3");//"%d", head->br.x1 );
+	mvwprintw( window, 5, 5, "4");//"%d", head->next->br.x1 );
+	/*while( iter->next!=NULL )
+	{
+		for( int i=iter->br.x1 ; i<iter->br.x2 ; i++ )
+		{
+			mvwprintw( window,iter->br.y, i, "%c", '+' );
+		}
+		iter = iter->next;
+	}*/
 	return 0;
 }
