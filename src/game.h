@@ -11,4 +11,12 @@
 #define PADDLE_LEN 10
 #define PADDLE_INTERVAL 4    /* Unit step a paddle can travel */
 
+char* choices[] = {
+			"Play",
+			"Settings",
+			"Exit"
+		};
+int n_choices = sizeof(choices) / sizeof(char*);
+void print_menu(WINDOW *menu_win, int highlight);
+
 #endif

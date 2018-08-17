@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[])
 {
-	initscr();             /* Initialize the window */
+	initscr();             /* Initialize the gamewindow */
 	noecho();              /* Don't echo any keypresses */
 	curs_set(FALSE);       /* Don't display a cursor */
 	keypad(stdscr,TRUE);   /* Use key code */
@@ -101,7 +101,30 @@ int main(int argc, char* argv[])
 		{
 			paddle_x+=PADDLE_INTERVAL;
 		}
-
+		/* Exit if 'q' is pressed */
+		else if( paddle_key == 'q' )
+		{
+			endwin();
+			return 0;
+		}
+		else if( paddle_key == 'p' )
+		{
+			int unpause = getch();
+			mvprintw((max_y/2)-2,(max_x/2)-28/2, "+-------------------------+");
+			mvprintw((max_y/2)-1,(max_x/2)-28/2, "| Press space to unpause. |");
+			mvprintw(max_y/2,(max_x/2)-28/2,     "+-------------------------+");
+			refresh();
+			while( unpause != ' ' && unpause != 'q' )
+			{
+				unpause = getch();
+			}
+			if( unpause == 'q' )
+			{
+				endwin();
+				return 0;
+			}
+			clear();
+		}
 		
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -111,6 +134,6 @@ int main(int argc, char* argv[])
 	}
 
 	endwin(); /* restore normal terminal behavior */
-
+	
 	return 0;
 }
