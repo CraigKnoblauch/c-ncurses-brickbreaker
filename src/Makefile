@@ -14,20 +14,21 @@
 CC=gcc
 CFLAGS=-I.
 ODIR=..
+OBJDIR=../obj
 LIBS=-lncurses
 EXEC=brickbreaker
-OBJ=brick-breaker.o brick.o
 
 
-brick-breaker : $(OBJ)
-	$(CC) $(CFLAGS) -o $(ODIR)/$(EXEC) $(OBJ) $(LIBS)
+brick-breaker : $(OBJDIR)/brick-breaker.o $(OBJDIR)/brick.o
+	$(CC) $(CFLAGS) -o $(ODIR)/$(EXEC) $(OBJDIR)/brick-breaker.o $(OBJDIR)/brick.o $(LIBS)
 
-brick-breaker.o : game.h brick.h
-	$(CC) $(CFLAGS) -c brick-breaker.c
+$(OBJDIR)/brick-breaker.o : game.h brick.h
+	$(CC) $(CFLAGS) -c brick-breaker.c -o $(OBJDIR)/brick-breaker.o
 
-brick.o : brick.h
+$(OBJDIR)/brick.o : brick.c brick.h
+	$(CC) $(CFLAGS) -c brick.c -o $(OBJDIR)/brick.o
 
 .PHONY: clean
 
 clean:
-	rm -f *.o $(ODIR)/$(EXEC)
+	rm -f *.o $(OBJDIR)/*.o $(ODIR)/$(EXEC)
