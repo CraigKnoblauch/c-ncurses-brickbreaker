@@ -2,9 +2,6 @@
 
 int generate_bricks(WINDOW* window, bricknode** head)
 {
-	/* List of bricks */
-	*(head) = (bricknode*)malloc(sizeof(bricknode));
-	bricknode* iter = *(head);
 
 	/* Get window dimensions */
 	int win_height=0, win_width=0;
@@ -24,23 +21,30 @@ int generate_bricks(WINDOW* window, bricknode** head)
 		curr_size = (rand() % MAX_SIZE) + 1;
 		while( curr_x<=brick_endx && curr_x+curr_size<=brick_endx )
 		{
-
 			/* Add brick to list */
-			if( iter == *(head) )
+			brick* newbrick = (brick*)malloc(sizeof(brick));
+			newbrick->x1 = curr_x;
+			newbrick->x2 = curr_x + curr_size;
+			newbrick->y = row;
+			bricknode* newbricknode = (bricknode *)malloc(sizeof(bricknode));
+			newbricknode->br = newbrick;
+			newbricknode->next = NULL;
+
+			/* If not first node, */
+			if( *(head)!=NULL )
 			{
-				iter->br.y = row;
-				iter->br.x1 = curr_x;
-				iter->br.x2 = curr_x + curr_size;
-				iter->next = NULL;
+				/* Set new node's next as head */
+				newbricknode->next = *(head);
+				/* Set head to this new node */
+				*(head) = newbricknode;
+
 			}
+			/* If first node, */
 			else
 			{
-				iter = iter->next;
-				iter = (bricknode*)malloc(sizeof(bricknode));
-				iter->br.y = row;
-				iter->br.x1 = curr_x;
-				iter->br.x2 = curr_x + curr_size;
-				iter->next = NULL;
+				/* Set head to new node */
+				*(head) = newbricknode;
+				newbricknode->next = NULL;
 			}
 
 			/* Draw brick */
@@ -61,15 +65,17 @@ int generate_bricks(WINDOW* window, bricknode** head)
 int print_bricks(WINDOW* window, bricknode* head)
 {
 	bricknode* iter = head;
-	mvwprintw( window, 5, 4, "3");//"%d", head->br.x1 );
-	mvwprintw( window, 5, 5, "4");//"%d", head->next->br.x1 );
-	/*while( iter->next!=NULL )
+	if( iter )
 	{
-		for( int i=iter->br.x1 ; i<iter->br.x2 ; i++ )
+		while( iter->next != NULL )
 		{
-			mvwprintw( window,iter->br.y, i, "%c", '+' );
+			for( int i=iter->br->x1 ; i<iter->br->x2 ; i++ )
+			{
+				mvwprintw( window,iter->br->y, i, "%c", '+' );
+			}
+			iter = iter->next;
 		}
-		iter = iter->next;
-	}*/
+		
+	}
 	return 0;
 }

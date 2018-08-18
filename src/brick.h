@@ -13,7 +13,7 @@ typedef struct Bricks
 
 typedef struct bricknode
 {
-	brick br;
+	brick* br;
 	struct bricknode* next;
 } bricknode;
 

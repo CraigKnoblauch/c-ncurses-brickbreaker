@@ -12,7 +12,7 @@
 
 
 CC=gcc
-CFLAGS=-I. --std=c99
+CFLAGS=-I. --std=c99 -g
 ODIR=..
 OBJDIR=../obj
 LIBS=-lncurses

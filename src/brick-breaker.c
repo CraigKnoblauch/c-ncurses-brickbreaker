@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 
 	/* Create bricks */
-	struct bricknode* bricklist;
+	struct bricknode* bricklist = NULL;
 	generate_bricks( stdscr,&bricklist );
 	refresh();
 
