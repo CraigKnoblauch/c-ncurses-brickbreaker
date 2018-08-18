@@ -36,7 +36,9 @@ int main(int argc, char* argv[])
 
 
 	/* Create bricks */
-
+	struct bricknode* bricklist;
+	generate_bricks( stdscr,&bricklist );
+	refresh();
 
 
 
@@ -51,6 +53,7 @@ int main(int argc, char* argv[])
 		getmaxyx(stdscr, max_y, max_x); /* 'stdscr' is the screen created by initscr() */
 		paddle_y=max_paddle_y;
 
+		generate_bricks(stdscr,&bricklist);
 		mvprintw( ball_y,ball_x,BALL );       /* Print ball at xy position */
 		mvprintw( paddle_y,paddle_x,PADDLE ); /* Print paddle at xy position */
 
