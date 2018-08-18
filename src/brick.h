@@ -23,6 +23,6 @@ typedef struct bricknode
 
 int generate_bricks( WINDOW*, bricknode** );
 int print_bricks( WINDOW*, bricknode* );
-int* check_collision( int, int, int, bricknode**, bricknode** );
+int* check_collision( int, int, int, int, bricknode**, bricknode** );
 
 #endif

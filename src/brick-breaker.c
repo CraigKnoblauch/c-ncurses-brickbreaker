@@ -23,6 +23,8 @@ int main(int argc, char* argv[])
 	int max_paddle_x=max_x-PADDLE_LEN, max_paddle_y=paddle_y; /* Paddle's boundaries */
 	int paddle_key;                                           /* Paddle keyboard input */
 
+	int* ball_brick_dir; /* xy direction for ball if brick collision */
+
 
 	int start_key=0;
 	mvprintw((max_y/2)-2,(max_x/2)-25/2, "Welcome to brick-breaker!");
@@ -36,8 +38,9 @@ int main(int argc, char* argv[])
 
 
 	/* Create bricks */
-	struct bricknode* bricklist_avail = NULL;
-	generate_bricks( stdscr,&bricklist );
+	bricknode* bricklist_avail = NULL;
+	bricknode* bricklist_gone  = NULL;
+	generate_bricks( stdscr,&bricklist_avail );
 	refresh();
 
 
@@ -64,34 +67,49 @@ int main(int argc, char* argv[])
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* BALL */
-		
-		next_ball_x = ball_x + x_ball_direction;
-		next_ball_y = ball_y + y_ball_direction;
 
-		/* If ball at x boundary */
-		if( next_ball_x >= max_x || next_ball_x < 0 )
+		/* Check if brick collision */
+		ball_brick_dir = check_collision( ball_x,ball_y,x_ball_direction,y_ball_direction,&bricklist_avail,&bricklist_gone);
+		mvwprintw( stdscr,20,20,"%d , %d",ball_brick_dir[0],ball_brick_dir[1] );
+		/* If no brick collision, */
+		if( ball_brick_dir[0]==0 && ball_brick_dir[1]==0 )
 		{
-			x_ball_direction *= -1;
+			next_ball_x = ball_x + x_ball_direction;
+			next_ball_y = ball_y + y_ball_direction;
+			/* If ball at x boundary */
+			if( next_ball_x >= max_x || next_ball_x < 0 )
+			{
+				x_ball_direction *= -1;
+			}
+			/* If ball at paddle */
+			else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x && next_ball_x<=paddle_x+PADDLE_LEN) )
+			{
+				y_ball_direction *= -1;
+			}
+			else
+			{
+				ball_x += x_ball_direction;
+			}
+			if( next_ball_y >= max_y || next_ball_y < 0 )
+			{
+				y_ball_direction *= -1;
+			}
+			else
+			{
+				ball_y += y_ball_direction;
+			}
 		}
-		/* If ball at paddle */
-		else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x && next_ball_x<=paddle_x+PADDLE_LEN) )
-		{
-			y_ball_direction *= -1;
-		}
+		/* If brick collision, */
 		else
 		{
+			x_ball_direction = ball_brick_dir[0];
+			y_ball_direction = ball_brick_dir[1];
 			ball_x += x_ball_direction;
-		}
-
-		if( next_ball_y >= max_y || next_ball_y < 0 )
-		{
-			y_ball_direction *= -1;
-		}
-		else
-		{
 			ball_y += y_ball_direction;
 		}
 
+		
+		
 
 		/* PADDLE */
 

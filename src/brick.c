@@ -83,20 +83,37 @@ int print_bricks(WINDOW* window, bricknode* head)
 
 
 
-int* check_collision(int ball_x, int ball_y, int direction, bricknode** bricklist_avail, bricknode** bricklist_gone)
+int* check_collision(int ball_x, int ball_y, int ball_x_direction, int ball_y_direction, bricknode** bricklist_avail, bricknode** bricklist_gone)
 {
 	/* Integer list to return:
 	 * 1. x: new ball x direction
 	 * 2. y: new ball y direction
 	 */
-	int* ball_newxydir = NULL;
+	int* ball_newxydir = (int*)malloc(2*sizeof(int));
+	ball_newxydir[0] = 0;
+	ball_newxydir[1] = 0;
 	/* Brick iterator */
-	bricknode* iter = *(head);
+	bricknode* iter = *(bricklist_avail);
 
 	/* For each available brick, */
 	while( iter->next != NULL )
 	{
-		/* COLLISION LOGIC HERE */
+		/* * * * * * * * * * * * * *
+		 *     COLLISION LOGIC     *
+		 * * * * * * * * * * * * * */
+
+		/*  \
+		 *  _\|
+		 *    +--+
+		 *    |  |
+		 *    +--+
+		 */
+		if( ball_x_direction==1 && ball_y_direction==1 && ball_x==(iter->br->x1-1) && ball_y==(iter->br->y-1) )
+		{
+			ball_newxydir[0] = -1;
+			ball_newxydir[1] = -1;
+		}
+
 		iter = iter->next;
 	}
 
