@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
 
 	int max_x=0 , max_y=0; /* Window dimensions */
 
-	int ball_x=0          , ball_y=0;           /* Ball's coordinates */
-	int next_ball_x=0     , next_ball_y=0;      /* Ball's next coordinates */
-	int x_ball_direction=1, y_ball_direction=1; /* Ball's direction of travel */
-	getmaxyx(stdscr, max_y, max_x);             /* 'stdscr' is the screen created by initscr() */
+	getmaxyx(stdscr, max_y, max_x);              /* 'stdscr' is the screen created by initscr() */
+	int ball_x=(max_x/2)+1 , ball_y=(max_y/2)+1; /* Ball's coordinates */
+	int next_ball_x=0      , next_ball_y=0;      /* Ball's next coordinates */
+	int x_ball_direction=1 , y_ball_direction=1; /* Ball's direction of travel */
 
 	int paddle_x=0                   , paddle_y=max_y-2;      /* Paddle's coordinates */
 	int max_paddle_x=max_x-PADDLE_LEN, max_paddle_y=paddle_y; /* Paddle's boundaries */
@@ -70,7 +70,8 @@ int main(int argc, char* argv[])
 
 		/* Check if brick collision */
 		ball_brick_dir = check_collision( ball_x,ball_y,x_ball_direction,y_ball_direction,&bricklist_avail,&bricklist_gone);
-		mvwprintw( stdscr,20,20,"%d , %d",ball_brick_dir[0],ball_brick_dir[1] );
+		//mvwprintw( stdscr,20,20,"%d , %d",ball_brick_dir[0],ball_brick_dir[1] );
+		//mvwprintw( stdscr,21,20,"x: %d, y: %d",ball_x,ball_y);
 		/* If no brick collision, */
 		if( ball_brick_dir[0]==0 && ball_brick_dir[1]==0 )
 		{
@@ -80,6 +81,7 @@ int main(int argc, char* argv[])
 			if( next_ball_x >= max_x || next_ball_x < 0 )
 			{
 				x_ball_direction *= -1;
+				ball_x += x_ball_direction;
 			}
 			/* If ball at paddle */
 			else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x && next_ball_x<=paddle_x+PADDLE_LEN) )
@@ -90,9 +92,11 @@ int main(int argc, char* argv[])
 			{
 				ball_x += x_ball_direction;
 			}
+			/* If ball at y boundary */
 			if( next_ball_y >= max_y || next_ball_y < 0 )
 			{
 				y_ball_direction *= -1;
+				ball_y += y_ball_direction;
 			}
 			else
 			{

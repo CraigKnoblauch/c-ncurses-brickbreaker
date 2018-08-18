@@ -113,6 +113,88 @@ int* check_collision(int ball_x, int ball_y, int ball_x_direction, int ball_y_di
 			ball_newxydir[0] = -1;
 			ball_newxydir[1] = -1;
 		}
+		/*   __ | __
+		 *     \|/
+		 *      |
+		 *     \|/
+		 *    +--+
+		 *    |  |
+		 *    +--+
+		 */
+		else if( ball_y_direction==1 && (ball_x>=iter->br->x1 && ball_x<=iter->br->x2) && ball_y==(iter->br->y-1) )
+		{
+			ball_newxydir[0] = ball_x_direction;
+			ball_newxydir[1] = -1;
+		}
+		/*          /
+		 *        |/_
+		 *    +--+
+		 *    |  |
+		 *    +--+
+		 */
+		else if( ball_x_direction==-1 && ball_y_direction==1 && ball_x==(iter->br->x2+1) && ball_y==(iter->br->y-1) )
+		{
+			ball_newxydir[0] = 1;
+			ball_newxydir[1] = -1;
+		}
+		/*
+		 *    +--+    /
+		 *    |  | <-|----
+		 *    +--+    \
+		 */
+		else if( ball_x_direction==-1 && ball_x==(iter->br->x2+1) && ball_y==(iter->br->y) )
+		{
+			ball_newxydir[0] = 1;
+			ball_newxydir[1] = ball_y_direction;
+		}
+		/*
+		 *    +--+
+		 *    |  |
+		 *    +--+ __
+		 *        |\
+		 *          \
+		 */
+		else if( ball_x_direction==-1 && ball_y_direction==-1 && ball_x==(iter->br->x2+1) && ball_y==(iter->br->y+1) )
+		{
+			ball_newxydir[0] = 1;
+			ball_newxydir[1] = 1;
+		}
+		/*
+		 *    +--+
+		 *    |  |
+		 *    +--+
+		 *     /|\
+		 *      |
+		 *   __/|\__
+		 *      |
+		 */
+		else if( ball_y_direction==-1 && (ball_x>=iter->br->x1 && ball_x<=iter->br->x2) && ball_y==(iter->br->y+1) )
+		{
+			ball_newxydir[0] = ball_x_direction;
+			ball_newxydir[1] = 1;
+		}
+		/*
+		 *    +--+
+		 *    |  |
+		 *  __+--+
+		 *   /|
+		 *  /
+		 */
+		else if( ball_x_direction==1 && ball_y_direction==-1 && ball_x==(iter->br->x1-1) && ball_y==(iter->br->y+1) )
+		{
+			ball_newxydir[0] = -1;
+			ball_newxydir[1] = 1;
+		}
+		/*
+		 *    \    +--+
+		 * ----|-> |  |
+		 *    /    +--+
+		 */
+		else if( ball_x_direction==1 && ball_x==(iter->br->x1-1) && ball_y==(iter->br->y) )
+		{
+			ball_newxydir[0] = -1;
+			ball_newxydir[1] = ball_y_direction;
+		}
 
 		iter = iter->next;
 	}
