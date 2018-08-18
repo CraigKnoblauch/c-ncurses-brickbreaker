@@ -18,8 +18,11 @@ typedef struct bricknode
 } bricknode;
 
 #define MAX_SIZE 4
+#define HORIZ_SPACE 5
+#define VERT_SPACE 3
 
 int generate_bricks( WINDOW*, bricknode** );
 int print_bricks( WINDOW*, bricknode* );
+int* check_collision( int, int, int, bricknode**, bricknode** );
 
 #endif

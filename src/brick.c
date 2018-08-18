@@ -1,5 +1,6 @@
 #include "brick.h"
 
+
 int generate_bricks(WINDOW* window, bricknode** head)
 {
 
@@ -15,7 +16,7 @@ int generate_bricks(WINDOW* window, bricknode** head)
 	int curr_x, curr_size;
 
 	/* Generate bricks */
-	for( int row=brick_starty ; row<=brick_endy ; row++ )
+	for( int row=brick_starty ; row<=brick_endy ; row+=(1+VERT_SPACE) )
 	{
 		curr_x = brick_startx;
 		curr_size = (rand() % MAX_SIZE) + 1;
@@ -52,7 +53,7 @@ int generate_bricks(WINDOW* window, bricknode** head)
 			{
 				mvwprintw( window,row,curr_x+i, "%c",'+' );
 			}
-			curr_x += (curr_size+1);
+			curr_x += (curr_size+HORIZ_SPACE);
 			curr_size = (rand() % MAX_SIZE) + 1;
 		}
 			
@@ -78,4 +79,27 @@ int print_bricks(WINDOW* window, bricknode* head)
 		
 	}
 	return 0;
+}
+
+
+
+int* check_collision(int ball_x, int ball_y, int direction, bricknode** bricklist_avail, bricknode** bricklist_gone)
+{
+	/* Integer list to return:
+	 * 1. x: new ball x direction
+	 * 2. y: new ball y direction
+	 */
+	int* ball_newxydir = NULL;
+	/* Brick iterator */
+	bricknode* iter = *(head);
+
+	/* For each available brick, */
+	while( iter->next != NULL )
+	{
+		/* COLLISION LOGIC HERE */
+		iter = iter->next;
+	}
+
+
+	return ball_newxydir;
 }
