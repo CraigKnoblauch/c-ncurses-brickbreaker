@@ -224,26 +224,26 @@ int* check_collision(int ball_x, int ball_y, int ball_x_direction, int ball_y_di
 				iter->next->prev = iter->prev;
 				iter->prev->next = iter->next;
 			}
-//
-//			/* Put orphaned node in list of hit bricks */
-//			/* If not first node, */
-//			if( *(bricklist_gone)!=NULL )
-//			{
-//				/* Set new node's next as head */
-//				iter->next = *(bricklist_gone);
-//				/* Set head to this new node */
-//				*(bricklist_gone) = iter;
-//				iter->prev = NULL;
-//
-//			}
-//			/* If first node, */
-//			else
-//			{
-//				/* Set head to new node */
-//				*(bricklist_gone) = iter;
-//				iter->next = NULL;
-//				iter->prev = NULL;
-//			}
+
+			/* Put orphaned node in list of hit bricks */
+			/* If not first node, */
+			if( *(bricklist_gone)!=NULL )
+			{
+				/* Set new node's next as head */
+				iter->next = *(bricklist_gone);
+				/* Set head to this new node */
+				*(bricklist_gone) = iter;
+				iter->prev = NULL;
+
+			}
+			/* If first node, */
+			else
+			{
+				/* Set head to new node */
+				*(bricklist_gone) = iter;
+				iter->next = NULL;
+				iter->prev = NULL;
+			}
 			break;
 		}
 	}
