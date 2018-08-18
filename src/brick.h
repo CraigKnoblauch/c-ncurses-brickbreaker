@@ -15,6 +15,7 @@ typedef struct bricknode
 {
 	brick* br;
 	struct bricknode* next;
+	struct bricknode* prev;
 } bricknode;
 
 #define MAX_SIZE 4

@@ -30,14 +30,18 @@ int generate_bricks(WINDOW* window, bricknode** head)
 			bricknode* newbricknode = (bricknode *)malloc(sizeof(bricknode));
 			newbricknode->br = newbrick;
 			newbricknode->next = NULL;
+			newbricknode->prev = NULL;
 
 			/* If not first node, */
 			if( *(head)!=NULL )
 			{
 				/* Set new node's next as head */
 				newbricknode->next = *(head);
+				/* Set old head's previous as new node */
+				(*head)->prev = newbricknode;
 				/* Set head to this new node */
 				*(head) = newbricknode;
+				newbricknode->prev = NULL;
 
 			}
 			/* If first node, */
@@ -46,6 +50,7 @@ int generate_bricks(WINDOW* window, bricknode** head)
 				/* Set head to new node */
 				*(head) = newbricknode;
 				newbricknode->next = NULL;
+				newbricknode->prev = NULL;
 			}
 
 			/* Draw brick */
@@ -195,10 +200,52 @@ int* check_collision(int ball_x, int ball_y, int ball_x_direction, int ball_y_di
 			ball_newxydir[0] = -1;
 			ball_newxydir[1] = ball_y_direction;
 		}
+		else
+		{
+			iter = iter->next;
+		}
 
-		iter = iter->next;
+		/* If collision, reorganize brick lists */
+		if( ball_newxydir[0]!=0 && ball_newxydir[1]!=0 )
+		{
+			/* If first node, */
+			if( iter == *(bricklist_avail) )
+			{
+				*(bricklist_avail) = (*bricklist_avail)->next;
+			}
+			/* If end node, */
+			else if( iter->next == NULL )
+			{
+				iter->prev->next = NULL;
+			}
+			/* If middle node, */
+			else
+			{
+				iter->next->prev = iter->prev;
+				iter->prev->next = iter->next;
+			}
+//
+//			/* Put orphaned node in list of hit bricks */
+//			/* If not first node, */
+//			if( *(bricklist_gone)!=NULL )
+//			{
+//				/* Set new node's next as head */
+//				iter->next = *(bricklist_gone);
+//				/* Set head to this new node */
+//				*(bricklist_gone) = iter;
+//				iter->prev = NULL;
+//
+//			}
+//			/* If first node, */
+//			else
+//			{
+//				/* Set head to new node */
+//				*(bricklist_gone) = iter;
+//				iter->next = NULL;
+//				iter->prev = NULL;
+//			}
+			break;
+		}
 	}
-
-
 	return ball_newxydir;
 }
