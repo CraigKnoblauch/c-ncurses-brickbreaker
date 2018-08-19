@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 *                    SPRITE LOGIC                   *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+		//mvwprintw(stdscr,25,25,"p_x: %d , p_y: %d , p2_x: %d , b_x: %d",paddle_x,paddle_y,paddle_x+PADDLE_LEN-1, ball_x);
 		/* BALL */
 		if( ball_curr_delay == BALL_DELAY )
 		{
@@ -92,9 +92,18 @@ int main(int argc, char* argv[])
 					ball_x += x_ball_direction;
 				}
 				/* If ball at paddle */
-				else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x && next_ball_x<=paddle_x+PADDLE_LEN) )
+				else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x && next_ball_x<=paddle_x+PADDLE_LEN-1) )
 				{
+					/* If at right edge. */
+					if( next_ball_x == paddle_x+PADDLE_LEN-1 )
+						x_ball_direction = 1;
+					/* If at left edge, */
+					else if( next_ball_x == paddle_x )
+						x_ball_direction = -1;
+
 					y_ball_direction *= -1;
+					ball_x += x_ball_direction;
+					ball_y += y_ball_direction;
 				}
 				else
 				{

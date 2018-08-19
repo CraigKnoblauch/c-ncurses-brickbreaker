@@ -11,7 +11,7 @@
 #define DEFAULT_BALL_DELAY 2; /* Default delay of ball, multiples of 'DELAY' */
 #define PADDLE "/^^^^^^^^\\"
 #define PADDLE_LEN 10
-#define PADDLE_INTERVAL 4    /* Unit step a paddle can travel */
+#define PADDLE_INTERVAL 1    /* Unit step a paddle can travel */
 
 int BALL_DELAY; /* Delay of ball, multiples of 'DELAY' */
 
