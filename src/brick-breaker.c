@@ -29,9 +29,13 @@ int main(int argc, char* argv[])
 
 	/* Initial welcome message */
 	int start_key=0;
-	mvprintw((max_y/2)-2,(max_x/2)-25/2, "Welcome to brick-breaker!");
-	mvprintw((max_y/2)-1,(max_x/2)-16/2, "Move: Arrow keys");
-	mvprintw(max_y/2,(max_x/2)-24/2,"Press spacebar to start.");
+	mvprintw((max_y/2)-3,(max_x/2)-27/2, "+=========================+");
+	mvprintw((max_y/2)-2,(max_x/2)-27/2, "|Welcome to brick-breaker!|");
+	mvprintw((max_y/2)-1,(max_x/2)-27/2, "| Move:  Arrow keys       |");
+	mvprintw((max_y/2)-0,(max_x/2)-27/2, "| Pause: p                |");
+	mvprintw((max_y/2)+1,(max_x/2)-27/2, "| Quit:  q                |");
+	mvprintw((max_y/2)+2,(max_x/2)-27/2, "|Press spacebar to start. |");
+	mvprintw((max_y/2)+3,(max_x/2)-27/2, "+=========================+");
 	while(start_key != ' ')
 	{
 		start_key = getch();
