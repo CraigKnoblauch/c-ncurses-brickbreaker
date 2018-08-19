@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
 	int next_ball_x=0      , next_ball_y=0;      /* Ball's next coordinates */
 	int x_ball_direction=1 , y_ball_direction=1; /* Ball's direction of travel */
 	int ball_curr_delay=0;                       /* Ball's delay counter */
+	BALL_DELAY = DEFAULT_BALL_DELAY;             /* Set ball's delay time at start */
 
 	int paddle_x=(max_x/2)-PADDLE_LEN, paddle_y=max_y-2;      /* Paddle's coordinates */
 	int max_paddle_x=max_x-PADDLE_LEN, max_paddle_y=paddle_y; /* Paddle's boundaries */
@@ -31,9 +32,11 @@ int main(int argc, char* argv[])
 	int start_key=0;
 	mvprintw((max_y/2)-3,(max_x/2)-27/2, "+=========================+");
 	mvprintw((max_y/2)-2,(max_x/2)-27/2, "|Welcome to brick-breaker!|");
-	mvprintw((max_y/2)-1,(max_x/2)-27/2, "| Move:  Arrow keys       |");
-	mvprintw((max_y/2)-0,(max_x/2)-27/2, "| Pause: p                |");
-	mvprintw((max_y/2)+1,(max_x/2)-27/2, "| Quit:  q                |");
+	mvprintw((max_y/2)-1,(max_x/2)-27/2, "| Move:   Arrow keys      |");
+	mvprintw((max_y/2)-1,(max_x/2)-27/2, "| Faster: f               |");
+	mvprintw((max_y/2)-1,(max_x/2)-27/2, "| Slower: s               |");
+	mvprintw((max_y/2)-0,(max_x/2)-27/2, "| Pause:  p               |");
+	mvprintw((max_y/2)+1,(max_x/2)-27/2, "| Quit:   q               |");
 	mvprintw((max_y/2)+2,(max_x/2)-27/2, "|Press spacebar to start. |");
 	mvprintw((max_y/2)+3,(max_x/2)-27/2, "+=========================+");
 	while(start_key != ' ')
@@ -73,7 +76,6 @@ int main(int argc, char* argv[])
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* BALL */
-
 		if( ball_curr_delay == BALL_DELAY )
 		{
 			/* Check if brick collision */
@@ -125,13 +127,25 @@ int main(int argc, char* argv[])
 		/* PADDLE */
 
 		paddle_key = getch();
-		if( paddle_key == KEY_LEFT && paddle_x-PADDLE_INTERVAL>=0 )
+		/* Push paddle left if left arrow pressed */
+		if( paddle_key == KEY_LEFT )
 		{
-			paddle_x-=PADDLE_INTERVAL;
+			/* If next paddle space is not past window, move normally */
+			if( paddle_x-PADDLE_INTERVAL>=0 ) 
+				paddle_x-=PADDLE_INTERVAL;
+			/* If next paddle space goes past window, put paddle at very left in window */
+			else
+				paddle_x = 0;
 		}
-		else if( paddle_key == KEY_RIGHT && paddle_x+PADDLE_INTERVAL<=max_paddle_x )
+		/* Push paddle right if right arrow pressed */
+		else if( paddle_key == KEY_RIGHT)
 		{
-			paddle_x+=PADDLE_INTERVAL;
+			/* If next paddle space is not past window, move normally */
+			if( paddle_x+PADDLE_INTERVAL<=max_paddle_x  )
+				paddle_x+=PADDLE_INTERVAL;
+			/* If next paddle space goes past window, put paddle at very right in window */
+			else
+				paddle_x = (max_x-PADDLE_LEN);
 		}
 		/* Exit if 'q' is pressed */
 		else if( paddle_key == 'q' )
@@ -139,6 +153,7 @@ int main(int argc, char* argv[])
 			endwin();
 			return 0;
 		}
+		/* Pause if 'p' is pressed */
 		else if( paddle_key == 'p' )
 		{
 			int unpause = getch();
@@ -156,6 +171,17 @@ int main(int argc, char* argv[])
 				return 0;
 			}
 			clear();
+		}
+		/* Increase ball speed if 'f' is pressed */
+		else if( paddle_key == 'f' )
+		{
+			if( BALL_DELAY > 0 )
+				BALL_DELAY--;
+		}
+		/* Decrease ball speed if 's' is pressed */
+		else if( paddle_key == 's' )
+		{
+			BALL_DELAY++;
 		}
 		
 		
