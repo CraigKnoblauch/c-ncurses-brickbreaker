@@ -11,11 +11,11 @@ int main(int argc, char* argv[])
 	keypad(stdscr,TRUE);   /* Use key code */
 	nodelay(stdscr, TRUE); /* Cause getch() to be non-blocking */
 
-	char newgame = NULL;
+	char newgame = 0; /* Placeholder for if player wants to play again */
 
 	do{
-		newgame = start_game( stdscr );
-	}while( newgame == 'y' );
+		newgame = start_game( stdscr ); /* Play a game */
+	}while( newgame == 'y' ); /* Play again if player returns 'y' */
 
 	return 0;
 }
@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
 
 char start_game(WINDOW* window)
 {
+	lives = LIVES;         /* Start with lives */
 	int max_x=0 , max_y=0; /* Window dimensions */
 
 	getmaxyx(window, max_y, max_x);              /* 'window' is the screen created by initscr() */
@@ -113,7 +114,7 @@ char start_game(WINDOW* window)
 		mvprintw( ball_y,ball_x,BALL );       /* Print ball at xy position */
 		mvprintw( paddle_y,paddle_x,PADDLE ); /* Print paddle at xy position */
 
-		mvwprintw(window,max_y/2,max_x/2,"Bricks left: %d",count_bricks(bricklist_avail));
+		mvwprintw(window,max_y-1,0,"Lives: %d | Bricks Left: %d",lives,count_bricks(bricklist_avail));
 
 		usleep(DELAY); /* A short delay between ball prints */
 
@@ -138,29 +139,86 @@ char start_game(WINDOW* window)
 					ball_x += x_ball_direction;
 				}
 				/* If ball at paddle */
-				else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x && next_ball_x<=paddle_x+PADDLE_LEN-1) )
+				else if( next_ball_y == paddle_y && (next_ball_x>=paddle_x-1 && next_ball_x<=paddle_x+PADDLE_LEN) )
 				{
 					/* If at right edge. */
 					if( next_ball_x == paddle_x+PADDLE_LEN-1 )
 						x_ball_direction = 1;
 					/* If at left edge, */
-					else if( next_ball_x == paddle_x )
+					else if( next_ball_x == paddle_x || (next_ball_x == paddle_x-1) )
 						x_ball_direction = -1;
 
 					y_ball_direction *= -1;
 					ball_x += x_ball_direction;
 					ball_y += y_ball_direction;
 				}
+				/* If ball within x bounds */
 				else
 				{
 					ball_x += x_ball_direction;
 				}
-				/* If ball at y boundary */
-				if( next_ball_y >= max_y || next_ball_y < 0 )
+
+				/* If ball at top y boundary  */
+				if( next_ball_y < 0 )
 				{
 					y_ball_direction *= -1;
 					ball_y += y_ball_direction;
 				}
+				/* If ball at bottom y boundary (bad), reset and pause, losing a life */
+				else if( next_ball_y >= max_y )
+				{
+					lives--;
+					/* Check for no lives */
+					if( lives <= 0 )
+					{
+						clear();
+						int gameopt = getch();
+						mvprintw((max_y/2)-2,(max_x/2)-28/2, "+-------------------------+");
+						mvprintw((max_y/2)-1,(max_x/2)-28/2, "|  You ran out of lives!  |");
+						mvprintw((max_y/2)-0,(max_x/2)-28/2, "|   Play again? (y / n)   |");
+						mvprintw((max_y/2)+1,(max_x/2)-28/2, "+-------------------------+");
+						refresh();
+						while( gameopt != 'y' && gameopt != 'n' )
+						{
+							gameopt = getch();
+						}
+						if( gameopt == 'n' )
+						{
+							endwin();
+							return 0;
+						}
+						else if( gameopt == 'y' )
+						{
+							clear();
+							return 'y';
+						}
+					}
+					else
+					{
+						ball_x=(max_x/2)+1;
+						ball_y=(max_y/2)+1;
+						paddle_x=(max_x/2)-PADDLE_LEN;
+						paddle_y=max_y-2;
+						int cont = getch();
+						clear();
+						print_bricks( window,bricklist_avail );
+						mvprintw( ball_y,ball_x,BALL );
+						mvprintw( paddle_y,paddle_x,PADDLE );
+						mvwprintw(window,max_y-1,0,"Lives: %d | Bricks Left: %d",lives,count_bricks(bricklist_avail));
+						refresh();
+						while( cont != ' ' && cont != 'q' )
+						{
+							cont = getch();
+						}
+						if( cont == 'q' )
+						{
+							endwin();
+							return 0;
+						}
+						clear();
+					}
+				}
+				/* If ball within y bounds */
 				else
 				{
 					ball_y += y_ball_direction;
