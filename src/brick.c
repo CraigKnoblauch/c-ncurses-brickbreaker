@@ -73,7 +73,7 @@ int print_bricks(WINDOW* window, bricknode* head)
 	bricknode* iter = head;
 	if( iter )
 	{
-		while( iter->next != NULL )
+		while( iter != NULL )
 		{
 			for( int i=iter->br->x1 ; i<iter->br->x2 ; i++ )
 			{
@@ -85,6 +85,24 @@ int print_bricks(WINDOW* window, bricknode* head)
 	}
 	return 0;
 }
+
+
+
+
+
+int count_bricks(bricknode* head)
+{
+	int count = 0;
+	bricknode* iter = head;
+	while( iter != NULL )
+	{
+		count++;
+		iter = iter->next;
+	}
+		
+	return count;
+}
+
 
 
 
@@ -101,7 +119,7 @@ int* check_collision(int ball_x, int ball_y, int ball_x_direction, int ball_y_di
 	bricknode* iter = *(bricklist_avail);
 
 	/* For each available brick, */
-	while( iter->next != NULL )
+	while( iter != NULL )
 	{
 		/* * * * * * * * * * * * * *
 		 *     COLLISION LOGIC     *
@@ -209,14 +227,25 @@ int* check_collision(int ball_x, int ball_y, int ball_x_direction, int ball_y_di
 		if( ball_newxydir[0]!=0 && ball_newxydir[1]!=0 )
 		{
 			/* If first node, */
-			if( iter == *(bricklist_avail) )
+			if( iter->prev == NULL )
 			{
-				*(bricklist_avail) = (*bricklist_avail)->next;
+				/* If also last node, set list to NULL */
+				if( iter->next == NULL )
+					(*bricklist_avail) = NULL;
+				else
+				{
+					*(bricklist_avail) = (*bricklist_avail)->next;
+					(*bricklist_avail)->prev = NULL;
+				}
 			}
 			/* If end node, */
 			else if( iter->next == NULL )
 			{
-				iter->prev->next = NULL;
+				/* If also first node, set list to NULL */
+				if( iter->prev == NULL )
+					(*bricklist_avail) = NULL;
+				else
+					iter->prev->next = NULL;
 			}
 			/* If middle node, */
 			else

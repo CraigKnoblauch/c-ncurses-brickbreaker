@@ -39,9 +39,14 @@ int main(int argc, char* argv[])
 	mvprintw((max_y/2)+1,(max_x/2)-27/2, "| Quit:   q               |");
 	mvprintw((max_y/2)+2,(max_x/2)-27/2, "|Press spacebar to start. |");
 	mvprintw((max_y/2)+3,(max_x/2)-27/2, "+=========================+");
-	while(start_key != ' ')
+	while(start_key != ' ' && start_key != 'q')
 	{
 		start_key = getch();
+	}
+	if( start_key == 'q' )
+	{
+		endwin();
+		return 0;
 	}
 
 
@@ -58,6 +63,33 @@ int main(int argc, char* argv[])
 
 	while(1)
 	{
+		/* Check for completed level */
+		if( bricklist_avail == NULL )
+		{
+			clear();
+			int gameopt = getch();
+			mvprintw((max_y/2)-2,(max_x/2)-28/2, "+-------------------------+");
+			mvprintw((max_y/2)-1,(max_x/2)-28/2, "| All bricks were broken! |");
+			mvprintw((max_y/2)-0,(max_x/2)-28/2, "|   Play again? (y / n)   |");
+			mvprintw((max_y/2)+1,(max_x/2)-28/2, "+-------------------------+");
+			refresh();
+			while( gameopt != 'y' && gameopt != 'n' )
+			{
+				gameopt = getch();
+			}
+			if( gameopt == 'n' )
+			{
+				endwin();
+				return 0;
+			}
+			else if( gameopt == 'y' )
+			{
+				clear();
+			}
+		}
+
+
+
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 *                    PRINT SPRITES                  *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -68,6 +100,8 @@ int main(int argc, char* argv[])
 		print_bricks(stdscr,bricklist_avail); /* Display available bricks */
 		mvprintw( ball_y,ball_x,BALL );       /* Print ball at xy position */
 		mvprintw( paddle_y,paddle_x,PADDLE ); /* Print paddle at xy position */
+
+		mvwprintw(stdscr,max_y/2,max_x/2,"Bricks left: %d",count_bricks(bricklist_avail));
 
 		usleep(DELAY); /* A short delay between ball prints */
 
