@@ -7,6 +7,7 @@
 #include "brick.h"
 
 #define DELAY 30000
+#define BALL_DELAY 2 /* Delay of ball, multiples of 'DELAY' */
 #define BALL "o"
 #define PADDLE "/^^^^^^^^\\"
 #define PADDLE_LEN 10
