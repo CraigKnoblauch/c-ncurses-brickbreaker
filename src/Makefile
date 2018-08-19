@@ -1,9 +1,9 @@
 # Dependency tree:
 #    /\                brickbreaker
 #    ||               /           \
-#   link       brick-breaker.o     brick.o
-#    ||               |              |
-#  compile     brick-breaker.c     brick.c
+#   link           game.o       brick.o
+#    ||               |            |
+#  compile         game.c       brick.c
 #    ||               \           /
 #    ||                \         brick.h
 #  include              \       /
@@ -19,11 +19,11 @@ LIBS=-lncurses
 EXEC=brickbreaker
 
 
-brick-breaker : $(OBJDIR)/brick-breaker.o $(OBJDIR)/brick.o
-	$(CC) $(CFLAGS) -o $(ODIR)/$(EXEC) $(OBJDIR)/brick-breaker.o $(OBJDIR)/brick.o $(LIBS)
+brick-breaker : $(OBJDIR)/game.o $(OBJDIR)/brick.o
+	$(CC) $(CFLAGS) -o $(ODIR)/$(EXEC) $(OBJDIR)/game.o $(OBJDIR)/brick.o $(LIBS)
 
-$(OBJDIR)/brick-breaker.o : brick-breaker.c game.h
-	$(CC) $(CFLAGS) -c brick-breaker.c -o $(OBJDIR)/brick-breaker.o
+$(OBJDIR)/game.o : game.c game.h
+	$(CC) $(CFLAGS) -c game.c -o $(OBJDIR)/game.o
 
 $(OBJDIR)/brick.o : brick.c brick.h game.h
 	$(CC) $(CFLAGS) -c brick.c -o $(OBJDIR)/brick.o
