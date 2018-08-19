@@ -7,7 +7,6 @@ typedef struct Bricks
 {
 	int x1, x2;
 	int y;
-	int visible;
 } brick;
 
 

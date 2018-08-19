@@ -11,10 +11,21 @@ int main(int argc, char* argv[])
 	keypad(stdscr,TRUE);   /* Use key code */
 	nodelay(stdscr, TRUE); /* Cause getch() to be non-blocking */
 
+	char newgame = NULL;
 
+	do{
+		newgame = start_game( stdscr );
+	}while( newgame == 'y' );
+
+	return 0;
+}
+
+
+char start_game(WINDOW* window)
+{
 	int max_x=0 , max_y=0; /* Window dimensions */
 
-	getmaxyx(stdscr, max_y, max_x);              /* 'stdscr' is the screen created by initscr() */
+	getmaxyx(window, max_y, max_x);              /* 'window' is the screen created by initscr() */
 	int ball_x=(max_x/2)+1 , ball_y=(max_y/2)+1; /* Ball's coordinates */
 	int next_ball_x=0      , next_ball_y=0;      /* Ball's next coordinates */
 	int x_ball_direction=1 , y_ball_direction=1; /* Ball's direction of travel */
@@ -54,7 +65,7 @@ int main(int argc, char* argv[])
 	/* Create bricks */
 	bricknode* bricklist_avail = NULL;
 	bricknode* bricklist_gone  = NULL;
-	generate_bricks( stdscr,&bricklist_avail );
+	generate_bricks( window,&bricklist_avail );
 	refresh();
 
 
@@ -85,6 +96,7 @@ int main(int argc, char* argv[])
 			else if( gameopt == 'y' )
 			{
 				clear();
+				return 'y';
 			}
 		}
 
@@ -94,21 +106,21 @@ int main(int argc, char* argv[])
 		 *                    PRINT SPRITES                  *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		clear();                        /* Clear screen of all characters */
-		getmaxyx(stdscr, max_y, max_x); /* 'stdscr' is the screen created by initscr() */
+		getmaxyx(window, max_y, max_x); /* 'window' is the screen created by initscr() */
 		paddle_y=max_paddle_y;          /* Put paddle at bottom */
 
-		print_bricks(stdscr,bricklist_avail); /* Display available bricks */
+		print_bricks(window,bricklist_avail); /* Display available bricks */
 		mvprintw( ball_y,ball_x,BALL );       /* Print ball at xy position */
 		mvprintw( paddle_y,paddle_x,PADDLE ); /* Print paddle at xy position */
 
-		mvwprintw(stdscr,max_y/2,max_x/2,"Bricks left: %d",count_bricks(bricklist_avail));
+		mvwprintw(window,max_y/2,max_x/2,"Bricks left: %d",count_bricks(bricklist_avail));
 
 		usleep(DELAY); /* A short delay between ball prints */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 *                    SPRITE LOGIC                   *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * */
-		//mvwprintw(stdscr,25,25,"p_x: %d , p_y: %d , p2_x: %d , b_x: %d",paddle_x,paddle_y,paddle_x+PADDLE_LEN-1, ball_x);
+		//mvwprintw(window,25,25,"p_x: %d , p_y: %d , p2_x: %d , b_x: %d",paddle_x,paddle_y,paddle_x+PADDLE_LEN-1, ball_x);
 		/* BALL */
 		if( ball_curr_delay == BALL_DELAY )
 		{

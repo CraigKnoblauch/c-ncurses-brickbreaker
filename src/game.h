@@ -15,14 +15,6 @@
 
 int BALL_DELAY; /* Delay of ball, multiples of 'DELAY' */
 
-
-/*char* choices[] = {
-			"Play",
-			"Settings",
-			"Exit"
-		};
-int n_choices = sizeof(choices) / sizeof(char*);
-*/
-void print_menu(WINDOW *menu_win, int highlight);
+char start_game(WINDOW* window);
 
 #endif
